@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="static/html2canvas.min.js"></script>
+      <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=7a6QKaIilZftIMmKGAFLG7QT1GLfIncg"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+	<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"K15SGU7T6JZOHoVU",ck:"K15SGU7T6JZOHoVU"})</script>
+    <meta name="keywords" content="免费客户地图,客户地图生成器,热力图生成器">
+    <meta name="description" content="免费的客户地图及热力图生成器,客户地图标记软件,客户地图标注,一键生成客户地图,热力图怎么制作本站可以一键生成热力图,热力图地图软件,客户地图制作软件,在线热力图生成">
+    <link href="static/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>免费客户地图热力图生成器-SkyZgh.com</title>
+	  <style>
+		   body,html{
+           width: 100%;
+           height: 100%;
+           padding: 0;
+           margin: 0;
+       }
+		  #map{
+           width: 100%;
+           height: 70%;
+           overflow: hidden;
+       }</style>
+  </head>
+  <body>
+		<div class="container-fluid">
+                <!-- 导航开始-->
+			<nav class="navbar navbar-expand-md  bg-light">
+                <div class="container-fluid">
+					<a class="navbar-brand" href="https://www.skyzgh.com"><img src="static/img/logo.png"  height="40px"  alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.html">免费热力图</a>
+                  </li>
+					<li class="nav-item">
+                    <a class="nav-link"  href="https://blog.skyzgh.com">博客空间</a>
+                  </li>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="https://house.skyzgh.com">重庆新房</a>
+                    </li>
+					<li class="nav-item">
+                      <a class="nav-link" href="https://tools.skyzgh.com">工具箱</a>
+                  </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="about.html">关于我们</a>
+                  </li>
+                </ul>
+                     </div>
+                </div>
+              </nav>
+			<!--导航结束-->
+			</div>
+	  <!--地图容器开始-->
+	  <div id="map"></div>
+	  <!--地图容器结束-->
+	  
+	  
+	  
+	  <div class="container-fluid">
+	  <div class="row">
+	  	<div class="col-6">
+			
+			<div class="row">
+			<textarea id='input' style="height:170px"></textarea>
+				</div>
+			<div class="row">
+					<div class="col">
+		  	<button onclick='bdGEO()' class='btn btn-primary'>批量标记</button>
+			 <button onclick='openHeatmap()' class='btn btn-danger'>显示热力图</button>
+			<button onclick='closeHeatmap()' class='btn btn-secondary'>关闭热力图</button>
+                        <button onclick="saveImage()" class='btn btn-dark'>保存图像</button>
+
+                    </div>
+			</div>
+		  </div>
+		  
+		  <div class="col-6">
+			  <p class="mb-0">第一步：左侧文本框输入地址，每行输入一个；第二步：点击批量标记；第三步：等待标记结束点击显示热力图；视频教程如下：<strong>点击或用抖音扫描下面二维码</strong></p>
+			              <a href="https://www.douyin.com/video/7214482496220581179" target="_blank"><img class="img" src="static/img/douyin.png" height="180px" alt="抖音APP扫描该二维码"></a>
+		  </div>
+		  
+		  
+		  
+		  
+		    <footer class="bd-footer p-3 mt-1 bg-light text-center text-sm-start">
+  			<div class="container">
+					<p class="mb-0">
+					  <a href="http://www.skyzgh.com">skyzgh.com</a>本网站为SkyZgh开发的个人网站，致力于开发一些免费的工具，供广大网友学习使用，目前已经上线免费热力图生成器，可根据地址批量标记地图及生成热力图，方便做营销的同学制作客户地图及热力图</p>
+					<p class="mb-0">
+						备案号：<a href="https://beian.miit.gov.cn" target="_blank">渝ICP备2023002268号-1</a></p>
+					  </div>
+				</footer>
+
+
+
+					  </div>
+	  </div>
+	  
+	  
+	  
+	  
+	    			<!-- 加载地图JS-->
+    					<script>		  
+					var map = new BMap.Map("map");          // 创建地图实例
+					var point = new BMap.Point(106.565336,29.561708);
+					map.centerAndZoom(point, 13);             // 初始化地图，设置中心点坐标和地图级别
+							map.setMapStyleV2({     
+  styleId: '11893544f8b09e84d6a5abaff6f78125'
+});
+					map.enableScrollWheelZoom(); // 允许滚轮缩放
+					var myGeo = new BMap.Geocoder();
+					var index = 0;
+					var adds=[];	
+					var points =[];
+
+					//设置当前定位为地图中心
+					function myFun(result){
+					var cityName = result.name;
+					map.setCenter(cityName);
+						}
+
+					var myCity = new BMap.LocalCity();
+					myCity.get(myFun);
+
+
+					function bdGEO(){
+
+						
+						adds=document.getElementById('input').value.split('\n');
+
+
+						if (index < adds.length) {
+							var add = adds[index];
+							geocodeSearch(add);
+
+							index++;
+						};
+
+
+					}
+
+					function geocodeSearch(add){
+						if(index < adds.length){
+							setTimeout(window.bdGEO,400);
+						} 
+						myGeo.getPoint(add, function(point){
+							if (point) {
+								var address = new BMap.Point(point.lng, point.lat);
+								var obj = {};
+								obj["lng"] = address.lng;
+								obj["lat"] = address.lat;
+								obj["count"] = "50";
+								points.push(obj);		
+								addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(10,-10)}));
+							}
+						}, "重庆市");
+					}
+				// 编写自定义函数,创建标注
+				function addMarker(point,label){
+					var marker = new BMap.Marker(point);
+					map.addOverlay(marker);
+
+					//marker.setLabel(label);
+				}
+
+					//热力图功能
+
+
+				if(!isSupportCanvas()){
+					alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+				}
+				//详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
+				//参数说明如下:
+				/* visible 热力图是否显示,默认为true
+				 * opacity 热力的透明度,1-100
+				 * radius 势力图的每个点的半径大小   
+				 * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
+				 *	{
+						.2:'rgb(0, 255, 255)',
+						.5:'rgb(0, 110, 255)',
+						.8:'rgb(100, 0, 255)'
+					}
+					其中 key 表示插值的位置, 0~1. 
+						value 为颜色值. 
+				 */
+				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50});
+				map.addOverlay(heatmapOverlay);
+
+
+				//是否显示热力图
+				function openHeatmap(){
+
+
+					heatmapOverlay.setDataSet({data:points,max:100});
+					heatmapOverlay.show();
+
+				}
+				function closeHeatmap(){
+					heatmapOverlay.hide();
+				}
+				closeHeatmap();
+
+				//判断浏览区是否支持canvas
+				function isSupportCanvas(){
+					var elem = document.createElement('canvas');
+					return !!(elem.getContext && elem.getContext('2d'));
+				}
+                //保存图像按钮
+                    function saveImage() {
+                        html2canvas(document.getElementById("map")).then(function(canvas) {
+                            var link = document.createElement("a");
+                            link.href = canvas.toDataURL();
+                            link.download = "myImage.png";
+                            link.click();
+                        });
+                    }
+				</script>
+			<!-- 加载地图JS-->	
+    <script src="static/bootstrap5/js/bootstrap.bundle.min.js" ></script>
+  </body>
+</html>
