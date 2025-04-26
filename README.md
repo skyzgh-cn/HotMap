@@ -3,7 +3,10 @@
 
 演示地址：[www.skyzgh.com](http://www.skyzgh.com)
 
-github部署地址：[https://skyzgh-cn.github.io/HotMap/](https://skyzgh-cn.github.io/HotMap/)  
+github pages部署地址：[https://skyzgh-cn.github.io/HotMap/](https://skyzgh-cn.github.io/HotMap/)  
+
+cloudflare pages部署地址：https://hotmap.pages.dev/
+
 
 #### 介绍
 通过百度地图实现热力图生成
@@ -14,7 +17,8 @@ github部署地址：[https://skyzgh-cn.github.io/HotMap/](https://skyzgh-cn.git
 
 #### 安装教程
 
-HTML无需部署，下载就可以体验效果
+方式1：HTML无需部署，下载就可以体验效果
+方式2：部署到cloudflare 或者 github pages
 
 #### 使用说明
 
