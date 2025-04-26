@@ -3,6 +3,8 @@
 
 演示地址：[www.skyzgh.com](http://www.skyzgh.com)
 
+github部署地址：[https://skyzgh-cn.github.io/HotMap/](https://skyzgh-cn.github.io/HotMap/)  
+
 #### 介绍
 通过百度地图实现热力图生成
 
