@@ -1,5 +1,4 @@
 # HotMap
-# 热力图生成器
 
 演示地址：[www.skyzgh.com](http://www.skyzgh.com)
 
@@ -20,5 +19,3 @@ HTML无需部署，下载就可以体验效果
 2.  第二步：点击批量标记
 3.  等待标记结束点击显示热力图
 
-### 效果演示
-![image](https://github.com/user-attachments/assets/b0fc9502-9161-47e6-bcb3-4196819d5ef5)
