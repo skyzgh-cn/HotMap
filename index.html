@@ -1,228 +1,539 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-      <script src="static/html2canvas.min.js"></script>
-      <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=7a6QKaIilZftIMmKGAFLG7QT1GLfIncg"></script>
+    <meta content="always" name="referrer">
+    <meta data-rh="true" property="og:image" content="https://www.skyzgh.com/hotmap.png"/>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?457b89613af16d6a7c73c6c77bf11c80";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script src="static/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=7a6QKaIilZftIMmKGAFLG7QT1GLfIncg"></script>
     <script type="text/javascript" src="https://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"K15SGU7T6JZOHoVU",ck:"K15SGU7T6JZOHoVU"})</script>
     <meta name="keywords" content="免费客户地图,客户地图生成器,热力图生成器">
     <meta name="description" content="免费的客户地图及热力图生成器,客户地图标记软件,客户地图标注,一键生成客户地图,热力图怎么制作本站可以一键生成热力图,热力图地图软件,客户地图制作软件,在线热力图生成">
     <link href="static/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>免费客户地图热力图生成器-SkyZgh.com</title>
-	  <style>
-		   body,html{
-           width: 100%;
-           height: 100%;
-           padding: 0;
-           margin: 0;
-       }
-		  #map{
-           width: 100%;
-           height: 70%;
-           overflow: hidden;
-       }</style>
-  </head>
-  <body>
-		<div class="container-fluid">
-                <!-- 导航开始-->
-			<nav class="navbar navbar-expand-md  bg-light">
+    <style>
+        :root {
+            --primary-color: #4b6584;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--secondary-color);
+            background-color: #f5f7fa;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            color: var(--secondary-color) !important;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .nav-link.active::after {
+            width: 80%;
+        }
+
+        .navbar .btn-outline-secondary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .navbar .btn-outline-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #map {
+            width: 100%;
+            height: 65vh;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 5px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px 8px 0 0 !important;
+            padding: 10px 10px;
+            opacity: 0.95;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #3d5166;
+            border-color: #3d5166;
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn {
+            border-radius: 5px;
+            padding: 8px 16px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        textarea {
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            resize: none;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        footer {
+            background-color: white;
+            padding: 5px 0;
+            margin-top: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        footer p {
+            text-align: center;
+            color: #666;
+            margin: 0;
+        }
+
+        footer a {
+            color: #4b6584;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            height: 100%;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+
+        .step-text {
+            font-weight: bold;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: auto;
+        }
+
+        .qr-container img {
+            max-width: 90px;
+            margin-top: 5px;
+        }
+
+        .custom-container {
+
+            width: 98%;
+            margin: 0 auto;
+        }
+
+        .map-card {
+            margin-bottom: 10px;
+        }
+
+        .control-panel {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .card-body {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .control-panel > div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card {
+            height: 100%;
+        }
+
+        @media (max-width: 992px) {
+            #map {
+                height: 60vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #map {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white px-4 py-2">
                 <div class="container-fluid">
-					<a class="navbar-brand" href="https://www.skyzgh.com"><img src="static/img/logo.png"  height="40px"  alt=""></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">免费热力图</a>
-                  </li>
-					<li class="nav-item">
-                    <a class="nav-link"  href="https://blog.skyzgh.com">博客空间</a>
-                  </li>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  href="https://house.skyzgh.com">重庆新房</a>
-                    </li>
-					<li class="nav-item">
-                      <a class="nav-link" href="https://tools.skyzgh.com">工具箱</a>
-                  </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="https://blog.skyzgh.com/about.html">关于我们</a>
-                  </li>
-                </ul>
-                     </div>
-                </div>
-              </nav>
-			<!--导航结束-->
-			</div>
-	  <!--地图容器开始-->
-	  <div id="map"></div>
-	  <!--地图容器结束-->
-	  
-	  
-	  
-	  <div class="container-fluid">
-	  <div class="row">
-	  	<div class="col-6">
-			
-			<div class="row">
-			<textarea id='input' style="height:170px"></textarea>
-				</div>
-			<div class="row">
-					<div class="col">
-		  	<button onclick='bdGEO()' class='btn btn-primary'>批量标记</button>
-			 <button onclick='openHeatmap()' class='btn btn-danger'>显示热力图</button>
-			<button onclick='closeHeatmap()' class='btn btn-secondary'>关闭热力图</button>
-                        <button onclick="saveImage()" class='btn btn-dark'>保存图像</button>
-
+                    <a class="navbar-brand" href="https://www.skyzgh.com">
+                        <img src="static/img/logo.png" alt="SkyZgh">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="index.php">免费热力图</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://blog.skyzgh.com">博客空间</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://house.skyzgh.com">重庆新房</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://tools.skyzgh.com">工具箱</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://site.skyzgh.com">网址导航</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://blog.skyzgh.com/about.html">关于我们</a>
+                            </li>
+                        </ul>
+                        <div class="d-flex">
+                            <a href="https://github.com/skyzgh-cn/HotMap" class="btn btn-outline-secondary" target="_blank">
+                                <i class="bi bi-github"></i> GitHub
+                            </a>
+                        </div>
                     </div>
-			</div>
-		  </div>
-		  
-		  <div class="col-6">
-			  <p class="mb-0">第一步：左侧文本框输入地址，每行输入一个；第二步：点击批量标记；第三步：等待标记结束点击显示热力图；视频教程如下：<strong>点击或用抖音扫描下面二维码</strong></p>
-			              <a href="https://www.douyin.com/video/7214482496220581179" target="_blank"><img class="img" src="static/img/douyin.png" height="180px" alt="抖音APP扫描该二维码"></a>
-		  </div>
-		  
-		  
-		  
-		  
-		    <footer class="bd-footer p-3 mt-1 bg-light text-center text-sm-start">
-  			<div class="container">
-					<p class="mb-0">
-					  <a href="http://www.skyzgh.com">skyzgh.com</a>本网站为SkyZgh开发的个人网站，致力于开发一些免费的工具，供广大网友学习使用，目前已经上线免费热力图生成器，可根据地址批量标记地图及生成热力图，方便做营销的同学制作客户地图及热力图</p>
-					<p class="mb-0">
-						备案号：<a href="https://beian.miit.gov.cn" target="_blank">渝ICP备2023002268号-1</a></p>
-					  </div>
-				</footer>
+                </div>
+            </nav>
+        </div>
+    </div>
 
+    <div class="custom-container mt-3">
+        <!-- 主地图区域 -->
+        <div class="card map-card">
+            <div class="card-header d-flex justify-content-between align-items-center py-2">
+                <h5 class="mb-0">
+                    <i class="bi bi-map"></i> 免费客户地图热力图生成器
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <!-- 地图容器开始 -->
+                <div id="map"></div>
+                <!-- 地图容器结束 -->
+            </div>
+        </div>
 
+        <!-- 操作区域 -->
+        <div class="row control-panel">
+            <!-- 左侧输入区 -->
+            <div class="col-md-8 mb-2">
+                <div class="card">
+                    <div class="card-header py-2">
+                        <h5 class="mb-0">
+                            <i class="bi bi-geo-alt"></i> 地址输入区
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <textarea id="input" class="form-control" rows="5" placeholder="请在此输入地址，每行一个地址"></textarea>
+                        </div>
+                        <div class="d-flex flex-wrap">
+                            <button onclick="bdGEO()" class="btn btn-primary">
+                                <i class="bi bi-pin-map"></i> 批量标记
+                            </button>
+                            <button onclick="openHeatmap()" class="btn btn-danger">
+                                <i class="bi bi-thermometer-high"></i> 显示热力图
+                            </button>
+                            <button onclick="closeHeatmap()" class="btn btn-secondary">
+                                <i class="bi bi-eye-slash"></i> 关闭热力图
+                            </button>
+                            <button onclick="saveImage()" class="btn btn-dark">
+                                <i class="bi bi-download"></i> 保存图像
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-					  </div>
-	  </div>
-	  
-	  
-	  
-	  
-	    			<!-- 加载地图JS-->
-    					<script>		  
-					var map = new BMap.Map("map");          // 创建地图实例
-					var point = new BMap.Point(106.565336,29.561708);
-					map.centerAndZoom(point, 13);             // 初始化地图，设置中心点坐标和地图级别
-							map.setMapStyleV2({     
-  styleId: '11893544f8b09e84d6a5abaff6f78125'
-});
-					map.enableScrollWheelZoom(); // 允许滚轮缩放
-					var myGeo = new BMap.Geocoder();
-					var index = 0;
-					var adds=[];	
-					var points =[];
+            <!-- 右侧使用说明 -->
+            <div class="col-md-4 mb-2">
+                <div class="card">
+                    <div class="card-header py-2">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle"></i> 使用说明
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="step-container flex-column">
+                                    <div class="step mb-2">
+                                        <div class="step-number">1</div>
+                                        <div class="step-text">在左侧文本框输入地址，每行一个</div>
+                                    </div>
+                                    <div class="step mb-2">
+                                        <div class="step-number">2</div>
+                                        <div class="step-text">点击"批量标记"按钮</div>
+                                    </div>
+                                    <div class="step mb-2">
+                                        <div class="step-number">3</div>
+                                        <div class="step-text">等待标记结束后点击"显示热力图"</div>
+                                    </div>
+                                    <div class="step mb-2">
+                                        <div class="step-number">4</div>
+                                        <div class="step-text">点击"保存图像"可保存到本地</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="qr-container">
+                                    <p class="text-center mb-1 small">视频教程</p>
+                                    <a href="https://www.douyin.com/video/7214482496220581179" target="_blank">
+                                        <img src="static/img/douyin.png" alt="抖音APP扫描该二维码" class="img-fluid">
+                                    </a>
+                                    <p class="text-center mt-1 small">点击图片或扫描</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-					//设置当前定位为地图中心
-					function myFun(result){
-					var cityName = result.name;
-					map.setCenter(cityName);
-						}
+    <footer class="mt-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="mb-1 text-center">
+                        &copy; 2025 - 2030 <a href="https://blog.skyzgh.com/about.html">www.SkyZgh.com</a>  <a href="https://beian.miit.gov.cn" target="_blank">渝ICP备2023002268号</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
 
-					var myCity = new BMap.LocalCity();
-					myCity.get(myFun);
+<!-- 加载地图JS-->
+<script>
+    var map = new BMap.Map("map");          // 创建地图实例
+    var point = new BMap.Point(106.565336,29.561708);
+    map.centerAndZoom(point, 13);             // 初始化地图，设置中心点坐标和地图级别
+    map.setMapStyleV2({
+        styleId: '11893544f8b09e84d6a5abaff6f78125'
+    });
+    map.enableScrollWheelZoom(); // 允许滚轮缩放
+    var myGeo = new BMap.Geocoder();
+    var index = 0;
+    var adds=[];
+    var points =[];
 
+    //设置当前定位为地图中心
+    function myFun(result){
+        var cityName = result.name;
+        map.setCenter(cityName);
+    }
 
-					function bdGEO(){
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun);
 
-						
-						adds=document.getElementById('input').value.split('\n');
+    function bdGEO(){
+        adds=document.getElementById('input').value.split('\n');
+        if (index < adds.length) {
+            var add = adds[index];
+            geocodeSearch(add);
+            index++;
+        };
+    }
 
+    function geocodeSearch(add){
+        if(index < adds.length){
+            setTimeout(window.bdGEO,400);
+        }
+        myGeo.getPoint(add, function(point){
+            if (point) {
+                var address = new BMap.Point(point.lng, point.lat);
+                var obj = {};
+                obj["lng"] = address.lng;
+                obj["lat"] = address.lat;
+                obj["count"] = "50";
+                points.push(obj);
+                addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(10,-10)}));
+            }
+        }, "重庆市");
+    }
 
-						if (index < adds.length) {
-							var add = adds[index];
-							geocodeSearch(add);
+    // 编写自定义函数,创建标注
+    function addMarker(point,label){
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        //marker.setLabel(label);
+    }
 
-							index++;
-						};
+    //热力图功能
+    if(!isSupportCanvas()){
+        alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+    }
 
+    heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50});
+    map.addOverlay(heatmapOverlay);
 
-					}
+    //是否显示热力图
+    function openHeatmap(){
+        heatmapOverlay.setDataSet({data:points,max:100});
+        heatmapOverlay.show();
+    }
 
-					function geocodeSearch(add){
-						if(index < adds.length){
-							setTimeout(window.bdGEO,400);
-						} 
-						myGeo.getPoint(add, function(point){
-							if (point) {
-								var address = new BMap.Point(point.lng, point.lat);
-								var obj = {};
-								obj["lng"] = address.lng;
-								obj["lat"] = address.lat;
-								obj["count"] = "50";
-								points.push(obj);		
-								addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(10,-10)}));
-							}
-						}, "重庆市");
-					}
-				// 编写自定义函数,创建标注
-				function addMarker(point,label){
-					var marker = new BMap.Marker(point);
-					map.addOverlay(marker);
+    function closeHeatmap(){
+        heatmapOverlay.hide();
+    }
 
-					//marker.setLabel(label);
-				}
+    closeHeatmap();
 
-					//热力图功能
+    //判断浏览区是否支持canvas
+    function isSupportCanvas(){
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
 
-
-				if(!isSupportCanvas()){
-					alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
-				}
-				//详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
-				//参数说明如下:
-				/* visible 热力图是否显示,默认为true
-				 * opacity 热力的透明度,1-100
-				 * radius 势力图的每个点的半径大小   
-				 * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
-				 *	{
-						.2:'rgb(0, 255, 255)',
-						.5:'rgb(0, 110, 255)',
-						.8:'rgb(100, 0, 255)'
-					}
-					其中 key 表示插值的位置, 0~1. 
-						value 为颜色值. 
-				 */
-				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50});
-				map.addOverlay(heatmapOverlay);
-
-
-				//是否显示热力图
-				function openHeatmap(){
-
-
-					heatmapOverlay.setDataSet({data:points,max:100});
-					heatmapOverlay.show();
-
-				}
-				function closeHeatmap(){
-					heatmapOverlay.hide();
-				}
-				closeHeatmap();
-
-				//判断浏览区是否支持canvas
-				function isSupportCanvas(){
-					var elem = document.createElement('canvas');
-					return !!(elem.getContext && elem.getContext('2d'));
-				}
-                //保存图像按钮
-                    function saveImage() {
-                        html2canvas(document.getElementById("map")).then(function(canvas) {
-                            var link = document.createElement("a");
-                            link.href = canvas.toDataURL();
-                            link.download = "myImage.png";
-                            link.click();
-                        });
-                    }
-				</script>
-			<!-- 加载地图JS-->	
-    <script src="static/bootstrap5/js/bootstrap.bundle.min.js" ></script>
-  </body>
+    //保存图像按钮
+    function saveImage() {
+        html2canvas(document.getElementById("map")).then(function(canvas) {
+            var link = document.createElement("a");
+            link.href = canvas.toDataURL();
+            link.download = "myImage.png";
+            link.click();
+        });
+    }
+</script>
+<!-- 加载地图JS-->
+<script src="static/bootstrap5/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
