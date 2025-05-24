@@ -412,7 +412,7 @@
                             <textarea id="input" class="form-control" rows="5" placeholder="请在此输入地址，每行一个地址"></textarea>
                         </div>
                         <div class="d-flex flex-wrap">
-                            <button onclick="bdGEO()" class="btn btn-primary">
+                            <button id="batchBtn"  onclick="bdGEO()" class="btn btn-primary" disabled>
                                 <i class="bi bi-pin-map"></i> 批量标记
                             </button>
                             <button onclick="openHeatmap()" class="btn btn-danger">
@@ -501,11 +501,13 @@
     var index = 0;
     var adds=[];
     var points =[];
+    var currentCity = "重庆市";
 
     //设置当前定位为地图中心
     function myFun(result){
-        var cityName = result.name;
-        map.setCenter(cityName);
+        currentCity = result.name; // 赋值给全局变量
+        map.setCenter(currentCity);
+        document.getElementById('batchBtn').disabled = false; // 启用按钮
     }
 
     var myCity = new BMap.LocalCity();
@@ -534,14 +536,25 @@
                 points.push(obj);
                 addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(10,-10)}));
             }
-        }, "重庆市");
+        }, currentCity);
     }
 
     // 编写自定义函数,创建标注
     function addMarker(point,label){
         var marker = new BMap.Marker(point);
+
         map.addOverlay(marker);
         //marker.setLabel(label);
+        marker.addEventListener("mouseover", function () {
+        marker.setLabel(label);
+        label.setStyle({ display: "block" });
+        });
+        // 监听鼠标移出，隐藏label
+        marker.addEventListener("mouseout", function () {
+        marker.setLabel(null);
+        label.setStyle({ display: "none" });
+        });
+           
     }
 
     //热力图功能
