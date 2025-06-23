@@ -421,6 +421,9 @@
                             <button onclick="closeHeatmap()" class="btn btn-secondary">
                                 <i class="bi bi-eye-slash"></i> 关闭热力图
                             </button>
+                            <button onclick="toggleLabels()" class="btn btn-info">
+                                <i class="bi bi-tag"></i> 显示/隐藏标记
+                            </button>
                             <button onclick="saveImage()" class="btn btn-dark">
                                 <i class="bi bi-download"></i> 保存图像
                             </button>
@@ -500,8 +503,10 @@
     var myGeo = new BMap.Geocoder();
     var index = 0;
     var adds=[];
-    var points =[];
+    var points = [];
     var currentCity = "重庆市";
+    var showLabels = false;
+    var markers = [];
 
     //设置当前定位为地图中心
     function myFun(result){
@@ -540,21 +545,41 @@
     }
 
     // 编写自定义函数,创建标注
-    function addMarker(point,label){
+    function addMarker(point, label) {
         var marker = new BMap.Marker(point);
-
+        markers.push({marker: marker, label: label});
         map.addOverlay(marker);
-        //marker.setLabel(label);
+        
+        if (showLabels) {
+            marker.setLabel(label);
+        }
+
         marker.addEventListener("mouseover", function () {
-        marker.setLabel(label);
-        label.setStyle({ display: "block" });
+            if (!showLabels) {
+                marker.setLabel(label);
+                label.setStyle({ display: "block" });
+            }
         });
-        // 监听鼠标移出，隐藏label
+
         marker.addEventListener("mouseout", function () {
-        marker.setLabel(null);
-        label.setStyle({ display: "none" });
+            if (!showLabels) {
+                marker.setLabel(null);
+                label.setStyle({ display: "none" });
+            }
         });
-           
+    }
+
+    function toggleLabels() {
+        showLabels = !showLabels;
+        markers.forEach(function(item) {
+            if (showLabels) {
+                item.marker.setLabel(item.label);
+                item.label.setStyle({ display: "block" });
+            } else {
+                item.marker.setLabel(null);
+                item.label.setStyle({ display: "none" });
+            }
+        });
     }
 
     //热力图功能
