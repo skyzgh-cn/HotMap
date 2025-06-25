@@ -539,7 +539,10 @@
                 obj["lat"] = address.lat;
                 obj["count"] = "50";
                 points.push(obj);
-                addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(10,-10)}));
+                
+                // 根据行政区划、道路和门牌号分割，并取最后一部分作为显示地址
+                var displayAddress = add.split(/省|市|区|县|镇|街道|路|号/).pop().trim();
+                addMarker(address,new BMap.Label(index+":"+displayAddress,{offset:new BMap.Size(10,-10)}));
             }
         }, currentCity);
     }
