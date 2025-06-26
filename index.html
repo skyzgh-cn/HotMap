@@ -590,7 +590,7 @@
         alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
     }
 
-    heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50});
+    var heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50});
     map.addOverlay(heatmapOverlay);
 
     //是否显示热力图
